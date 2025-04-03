@@ -37,9 +37,11 @@ SAST-Approval 是一款高效的项目审批系统，专为管理南邮创新杯
 
 ## 系统架构
 
+![系统架构图](docs/images/architecture.png)
+
 项目采用经典三层架构设计：
 
-1. **表示层（Controller）**：处理HTTP请求和响应
+1. **控制层（Controller）**：处理HTTP请求和响应
 2. **业务逻辑层（Service）**：实现核心业务逻辑
 3. **数据访问层（Mapper）**：与数据库交互
 
@@ -83,3 +85,7 @@ src/main/java/com/sast/approval/
 ├── service/                      # 服务接口与实现
 └── utils/                        # 工具类
 ```
+
+---
+
+*架构图由 [ahmedkhaleel2004/gitdiagram](https://github.com/ahmedkhaleel2004/gitdiagram) 生成*
