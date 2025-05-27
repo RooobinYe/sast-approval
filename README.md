@@ -37,7 +37,93 @@ SAST-Approval 是一款高效的项目审批系统，专为管理南邮创新杯
 
 ## 系统架构
 
-![系统架构图](docs/images/architecture.png)
+```mermaid
+flowchart TD
+    %% External Access
+    E1["User Request"]:::external
+
+    %% Application Entry
+    A1["SastApprovalApplication"]:::app
+    E1 --> A1
+    click A1 "https://github.com/rooobinye/sast-approval/blob/master/src/main/java/com/sast/approval/SastApprovalApplication.java"
+
+    %% Security Interceptor (JWT & AOP)
+    sec["JWT Interceptor & AOP\n(Annotations/Aspects)"]:::security
+    E1 --> sec
+    sec --> A1
+    click sec "https://github.com/rooobinye/sast-approval/blob/master/src/main/java/com/sast/approval/interceptor/JwtInterceptor.java"
+
+    %% Presentation Layer
+    subgraph "Presentation Layer"
+        ctrl["REST Controllers"]:::controller
+    end
+    A1 --> ctrl
+    click ctrl "https://github.com/rooobinye/sast-approval/tree/master/src/main/java/com/sast/approval/controller"
+
+    %% Business Logic Layer
+    subgraph "Business Layer"
+        svc["Service Components"]:::service
+    end
+    ctrl --> svc
+    click svc "https://github.com/rooobinye/sast-approval/tree/master/src/main/java/com/sast/approval/service"
+
+    %% Data Access Layer
+    subgraph "Data Access Layer"
+        mapper["Mapper Interfaces"]:::mapper
+    end
+    svc --> mapper
+    click mapper "https://github.com/rooobinye/sast-approval/tree/master/src/main/java/com/sast/approval/mapper"
+
+    %% Data Models
+    model["Data Models & DTO"]:::model
+    ctrl --> model
+    svc --> model
+    click model "https://github.com/rooobinye/sast-approval/tree/master/src/main/java/com/sast/approval/model"
+
+    %% Global Exception Handling
+    exception["Global Exception Handler"]:::exception
+    ctrl -.-> exception
+    svc -.-> exception
+    click exception "https://github.com/rooobinye/sast-approval/tree/master/src/main/java/com/sast/approval/exception"
+
+    %% Configuration Components
+    config["Configuration Components\n(Jackson, MyBatis-Plus, Redis, etc.)"]:::config
+    config --- ctrl
+    config --- svc
+    config --- mapper
+    click config "https://github.com/rooobinye/sast-approval/tree/master/src/main/java/com/sast/approval/config"
+
+    %% Utility Classes
+    utils["Utility Classes\n(JwtUtils, PasswordEncoder, RedisUtils)"]:::utility
+    utils --- ctrl
+    utils --- svc
+    click utils "https://github.com/rooobinye/sast-approval/tree/master/src/main/java/com/sast/approval/utils"
+
+    %% External Systems
+    mysql["MySQL Database"]:::db
+    mapper --> mysql
+
+    redis["Redis Cache"]:::db2
+    config --- redis
+
+    jwt["JWT Authentication"]:::securityExternal
+    sec --- jwt
+
+    %% Styles
+    classDef external fill:#f9e79f,stroke:#333,stroke-width:2px;
+    classDef app fill:#d1f2eb,stroke:#333,stroke-width:2px;
+    classDef controller fill:#aed6f1,stroke:#333,stroke-width:2px;
+    classDef service fill:#abebc6,stroke:#333,stroke-width:2px;
+    classDef mapper fill:#f9e79f,stroke:#333,stroke-width:2px;
+    classDef model fill:#d7bde2,stroke:#333,stroke-width:2px;
+    classDef config fill:#e74c3c,stroke:#333,stroke-width:2px;
+    classDef security fill:#fcd5ce,stroke:#333,stroke-width:2px;
+    classDef exception fill:#85c1e9,stroke:#333,stroke-width:2px;
+    classDef utility fill:#82e0aa,stroke:#333,stroke-width:2px;
+    classDef db fill:#f5b041,stroke:#333,stroke-width:2px;
+    classDef db2 fill:#f7dc6f,stroke:#333,stroke-width:2px;
+    classDef securityExternal fill:#f8c471,stroke:#333,stroke-width:2px;
+```
 
 项目采用经典三层架构设计：
 
